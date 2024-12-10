@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    konghq.com/methods: GET
+    konghq.com/regex-priority: "100"
+    konghq.com/strip-path: "false"
+    konghq.com/tags: ""
+    konghq.com/preserve-host: "false"
+  name: spec-viacep-cluster-k8s-playrole-viacep-viacep-getaddressbyzip-code
+spec:
+  ingressClassName: kong
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: spec-viacep-cluster-k8s-playrole
+                port:
+                  number: 80
+            path: /~/spec-viacep-cluster-k8s-playrole/ws/(?<zip_code>[^#?/]+)/json$
+            pathType: ImplementationSpecific
+      host: cluster-k8s-playrole.vkpr.platform.vee.codes
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    konghq.com/path: /
+    konghq.com/protocol: http
+  name: spec-viacep-cluster-k8s-playrole
+spec:
+  type: ExternalName
+  externalName: viacep.com.br
+---
+
