@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "spec-viacep-cluster-k8s-playrole"
+  description: "Artifacts generator via Spec."
+  annotations:
+    github.com/project-slug: veecode-homolog/spec-viacep-cluster-k8s-playrole
+    backstage.io/techdocs-ref: dir:..
+    github.com/workflows: publish.yml,remove.yml
+    kong-manager/service-name: app.spec-viacep-cluster-k8s-playrole.80
+    kong-manager/instance: cluster-k8s-playrole
+    kong-manager/spec : openapi-swagger.yaml
+spec:
+  type: devops
+  lifecycle: experimental
+  owner: "group:default/admin"
+  providesApis:
+    - spec-viacep-cluster-k8s-playrole
