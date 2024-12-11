@@ -1,75 +1,97 @@
 openapi: 3.0.1
 info:
-    title: ViaCEP
-    description: Consulte CEPs de todo o Brasil.
-    termsOfService: http://swagger.io/terms/
-    contact:
-        email: apiteam@swagger.io
-    license:
-        name: Apache 2.0
-        url: http://www.apache.org/licenses/LICENSE-2.0.html
-    version: 1.0.0
+  title: ViaCEP
+  description: Consulte CEPs de todo o Brasil.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
 externalDocs:
-    description: Find out more about Swagger
-    url: http://swagger.io
+  description: Find out more about Swagger
+  url: http://swagger.io
 servers:
-    - url: https://viacep.com.br/
+  - url: https://viacep.com.br/
 tags:
-    - name: Address
-      description: Getting zip-code informations
-      externalDocs:
-        description: Find out more
-        url: http://swagger.io
+  - name: Address
+    description: Getting zip-code informations
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+x-kong-basic-auth:
+  name: basic-auth
+  enabled: true
+  config:
+    hide_credentials: false
+x-kong-rate-limiting:
+  name: rate-limiting
+  enabled: true
+  config:
+    policy: local
+    hide_client_headers: false
+    redis_database: 0
+    limit_by: consumer
+    redis_port: 6379
+    redis_ssl_verify: false
+    redis_ssl: false
+    redis_timeout: 2000
+    minute: 5
+    sync_rate: -1
+    error_message: API rate limit exceeded
+    error_code: 429
+    fault_tolerant: true
 paths:
-    '/ws/{zip-code}/json':
-        get:
-            tags:
-                - Address
-            summary: Find Address by zip-code
-            description: Returns a single Address
-            operationId: getAddressByzip-code
-            parameters:
-                - name: zip-code
-                  in: path
-                  description: zip-code to search
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                '200':
-                    description: successful operation
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Address'
-                '400':
-                    description: Invalid zip-code supplied
-                    content: {}
-                '404':
-                    description: Address not found
-                    content: {}
+  /ws/{zip-code}/json:
+    get:
+      tags:
+        - Address
+      summary: Find Address by zip-code
+      description: Returns a single Address
+      operationId: getAddressByzip-code
+      parameters:
+        - name: zip-code
+          in: path
+          description: zip-code to search
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '400':
+          description: Invalid zip-code supplied
+          content: {}
+        '404':
+          description: Address not found
+          content: {}
 components:
-    schemas:
-        Address:
-            type: object
-            properties:
-                cep:
-                    type: string
-                logradouro:
-                    type: string
-                complemento:
-                    type: string
-                bairro:
-                    type: string
-                localidade:
-                    type: string
-                uf:
-                    type: string
-                ibge:
-                    type: string
-                gia:
-                    type: string
-                ddd:
-                    type: string
-                siafi:
-                    type: string
+  schemas:
+    Address:
+      type: object
+      properties:
+        cep:
+          type: string
+        logradouro:
+          type: string
+        complemento:
+          type: string
+        bairro:
+          type: string
+        localidade:
+          type: string
+        uf:
+          type: string
+        ibge:
+          type: string
+        gia:
+          type: string
+        ddd:
+          type: string
+        siafi:
+          type: string
