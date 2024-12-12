@@ -20,6 +20,23 @@ tags:
     externalDocs:
       description: Find out more
       url: http://swagger.io
+x-kong-rate-limiting:
+  name: rate-limiting
+  enabled: true
+  config:
+    policy: local
+    hide_client_headers: false
+    redis_database: 0
+    limit_by: consumer
+    redis_port: 6379
+    redis_ssl_verify: false
+    redis_ssl: false
+    redis_timeout: 2000
+    minute: 5
+    sync_rate: -1
+    error_message: API rate limit exceeded
+    error_code: 429
+    fault_tolerant: true
 paths:
   /ws/{zip-code}/json:
     get:
